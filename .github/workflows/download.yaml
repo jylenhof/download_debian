@@ -35,7 +35,7 @@ jobs:
       run: |
         echo "${{ steps.last_image_docker_io.outputs.last_image }}"
         echo "${{ steps.last_image_local_repo.outputs.last_image }}"
-        docker pull "docker://docker.io/debian:${{ steps.last_image_docker_io.outputs.last_image }}"
-        docker tag "docker://docker.io/debian:${{ steps.last_image_docker_io.outputs.last_image }}" \
-          "docker://ghcr.io/jylenhof/download_debian/debian:${{ steps.last_image_docker_io.outputs.last_image }}"
+        docker pull "docker.io/debian:${{ steps.last_image_docker_io.outputs.last_image }}"
+        docker tag "docker.io/debian:${{ steps.last_image_docker_io.outputs.last_image }}" \
+          "ghcr.io/jylenhof/download_debian/debian:${{ steps.last_image_docker_io.outputs.last_image }}"
         docker image ls
