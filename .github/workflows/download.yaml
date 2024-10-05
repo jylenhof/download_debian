@@ -4,7 +4,20 @@ jobs:
   myjob:
     runs-on: [ubuntu-22.04]
     steps:
-    - name: "Download"
+    - name: "Get last tag image on docker.io"
+      id: last_image_docker_io
       shell: bash
       run: |
-        skopeo list-tags docker://docker.io/debian | jq -r 'last(.Tags|sort|.[]|select(.|match("^stable-[0-9]{8}-slim$")))'
+        skopeo list-tags docker://docker.io/debian | jq -r 'last(.Tags|sort|.[]|select(.|match("^bookworm-[0-9]{8}-slim$")))'
+
+    - name: "get last image in local repo"
+      id: last_image_local_repo
+      shell: bash
+      run: |
+        skopeo list-tags docker://ghcr.io/jylenhof/download_debian/debian | jq -r 'last(.Tags|sort|.[]|select(.|match("^bookworm-[0-9]{8}-slim$")))'
+        
+    - name: "compare image"
+      run:
+        echo "${{ last_image_docker_io.output }}"
+      
+# docker push ghcr.io/NAMESPACE/IMAGE_NAME:latest
