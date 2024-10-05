@@ -7,4 +7,4 @@ jobs:
     - name: "Download"
       shell: bash
       run: |
-        echo "Download" 
+        skopeo list-tags docker://docker.io/debian | jq -r 'last(.Tags|sort|.[]|select(.|match("^stable-[0-9]{8}-slim$")))'
