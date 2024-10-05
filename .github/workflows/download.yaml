@@ -8,16 +8,18 @@ jobs:
       id: last_image_docker_io
       shell: bash
       run: |
-        skopeo list-tags docker://docker.io/debian | jq -r 'last(.Tags|sort|.[]|select(.|match("^bookworm-[0-9]{8}-slim$")))'
+        last_image=$(skopeo list-tags docker://docker.io/debian | jq -r 'last(.Tags|sort|.[]|select(.|match("^bookworm-[0-9]{8}-slim$")))')
+        echo "last_image=${last_image}" >> "${GITHUB_OUTPUT}"
 
     - name: "get last image in local repo"
       id: last_image_local_repo
       shell: bash
       run: |
-        skopeo list-tags docker://ghcr.io/jylenhof/download_debian/debian | jq -r 'last(.Tags|sort|.[]|select(.|match("^bookworm-[0-9]{8}-slim$")))'
-        
+        last_image=$(skopeo list-tags docker://ghcr.io/jylenhof/download_debian/debian | jq -r 'last(.Tags|sort|.[]|select(.|match("^bookworm-[0-9]{8}-slim$")))')
+        echo "last_image=${last_image}" >> "${GITHUB_OUTPUT}"
+
     - name: "compare image"
       run:
-        echo "${{ last_image_docker_io.output }}"
+        echo "${{ steps.last_image_docker_io.outputs.last_image }}"
       
 # docker push ghcr.io/NAMESPACE/IMAGE_NAME:latest
