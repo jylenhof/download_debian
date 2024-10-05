@@ -32,9 +32,10 @@ jobs:
         else
           echo "last_image=None" >> "${GITHUB_OUTPUT}"
         fi
+        echo "last_image:${last_image}"
 
     - name: "compare image"
-      if: "${{ steps.last_image_docker_io.outputs.last_image }} != ${{ steps.last_image_local_repo.outputs.last_image }}"
+      if: steps.last_image_docker_io.outputs.last_image != steps.last_image_local_repo.outputs.last_image
       run: |
         echo "${{ steps.last_image_docker_io.outputs.last_image }}"
         echo "${{ steps.last_image_local_repo.outputs.last_image }}"
