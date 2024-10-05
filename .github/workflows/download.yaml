@@ -1,3 +1,11 @@
-on:
-  
-
+on: 
+  push:
+  workflow_dispatch:
+jobs:
+  myjob:
+    runs-on: [linux]
+    steps:
+    - name: "Download"
+      shell: bash
+      run: |
+        echo "Download" 
