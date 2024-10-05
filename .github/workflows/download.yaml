@@ -11,6 +11,13 @@ jobs:
         last_image=$(skopeo list-tags docker://docker.io/debian | jq -r 'last(.Tags|sort|.[]|select(.|match("^bookworm-[0-9]{8}-slim$")))')
         echo "last_image=${last_image}" >> "${GITHUB_OUTPUT}"
 
+    - name: Login to GitHub Container Registry
+      uses: docker/login-action@v3
+      with:
+        registry: "ghcr.io"
+        username: "${{ github.actor }}"
+        password: "${{ secrets.GITHUB_TOKEN }}"
+
     - name: "get last image in local repo"
       id: last_image_local_repo
       shell: bash
