@@ -1,7 +1,10 @@
 on: 
   workflow_dispatch:
 jobs:
-  myjob:
+  myjob:    
+    permissions:
+      contents: read
+      packages: write
     runs-on: [ubuntu-22.04]
     steps:
     - name: "Get last tag image on docker.io"
