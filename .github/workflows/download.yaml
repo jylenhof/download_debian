@@ -21,13 +21,17 @@ jobs:
     - name: "get last image in local repo"
       id: last_image_local_repo
       run: |
-        exist_image=$(skopeo list-tags docker://ghcr.io/jylenhof/download_debian/debian && echo "exist" || echo "notexist" && exit 0)
+        exist_image="$(skopeo list-tags docker://ghcr.io/jylenhof/download_debian/debian && echo "exist" || echo "notexist" && exit 0)"
         echo "exist_image=${exist_image}"
-    #     last_image=$(skopeo list-tags docker://ghcr.io/jylenhof/download_debian/debian | jq -r 'last(.Tags|sort|.[]|select(.|match("^bookworm-[0-9]{8}-slim$")))')
-    #     echo "last_image=${last_image}" >> "${GITHUB_OUTPUT}"
+        if [ "${exist_image}" == "exist" ]; then
+          last_image="$(skopeo list-tags docker://ghcr.io/jylenhof/download_debian/debian | jq -r 'last(.Tags|sort|.[]|select(.|match("^bookworm-[0-9]{8}-slim$")))')"
+          echo "last_image=${last_image}" >> "${GITHUB_OUTPUT}"
+        else
+          echo "last_image=None" >> "${GITHUB_OUTPUT}"
+        fi
 
-    # - name: "compare image"
-    #   run:
-    #     echo "${{ steps.last_image_docker_io.outputs.last_image }}"
+    - name: "compare image"
+      run: |
+        echo "${{ steps.last_image_docker_io.outputs.last_image }}"
       
 # docker push ghcr.io/NAMESPACE/IMAGE_NAME:latest
