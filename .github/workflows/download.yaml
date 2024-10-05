@@ -2,7 +2,7 @@ on:
   workflow_dispatch:
 jobs:
   myjob:
-    runs-on: [linux]
+    runs-on: [ubuntu]
     steps:
     - name: "Download"
       shell: bash
