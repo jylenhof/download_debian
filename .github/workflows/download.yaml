@@ -22,6 +22,7 @@ jobs:
       id: last_image_local_repo
       shell: bash
       run: |
+        exist_image=$(skopeo list-tags docker://ghcr.io/jylenhof/download_debian/debian && echo "exist" || echo "notexist" && exit 0)
         last_image=$(skopeo list-tags docker://ghcr.io/jylenhof/download_debian/debian | jq -r 'last(.Tags|sort|.[]|select(.|match("^bookworm-[0-9]{8}-slim$")))')
         echo "last_image=${last_image}" >> "${GITHUB_OUTPUT}"
 
