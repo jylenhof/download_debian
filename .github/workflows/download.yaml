@@ -57,6 +57,7 @@ jobs:
       with:
         commit-message: "PR to update base-image"
         author: "Jean-Yves LENHOF <jygithub@lenhof.eu.org>"
+        committer: "Jean-Yves LENHOF <jygithub@lenhof.eu.org>"
         branch: "chore/update_base_image"
         delete-branch: true
         title: "chore(Dockerfile): update base image full"
