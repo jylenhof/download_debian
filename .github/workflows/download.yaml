@@ -54,7 +54,7 @@ jobs:
       uses: peter-evans/create-pull-request@v7
       with:
         commit-message: "PR to update base-image"
-        committer: "Bot Workflow updater <bot@lenhof.eu.org>"
+        committer: jylenhof <36410287+jylenhof@users.noreply.github.com>
         branch: "chore/update_base_image"
         delete-branch: true
         title: "chore(Dockerfile): update base image full"
