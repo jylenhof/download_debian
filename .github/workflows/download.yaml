@@ -1,7 +1,9 @@
+name: "Workflow MAJ Image Docker"
 on: 
   workflow_dispatch:
 jobs:
-  myjob:    
+  myjob:
+    name: "myjob"
     permissions:
       contents: read
       packages: write
