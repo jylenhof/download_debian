@@ -23,6 +23,7 @@ jobs:
 
     - name: "get last image in local repo"
       id: last_image_local_repo
+      # not using bash here because we want to avoid the pipefail default settings of bash
       run: |
         exist_image="exist"
         exist_image="$(skopeo list-tags docker://ghcr.io/jylenhof/download_debian/debian || echo "notexist")"
@@ -33,15 +34,21 @@ jobs:
         else
           echo "last_image=None" >> "${GITHUB_OUTPUT}"
         fi
-        echo "last_image:${last_image}"
 
-    - name: "compare image"
+    - name: "compare image and push it to our gar"
       if: steps.last_image_docker_io.outputs.last_image != steps.last_image_local_repo.outputs.last_image
+      shell: bash
       run: |
-        echo "${{ steps.last_image_docker_io.outputs.last_image }}"
-        echo "${{ steps.last_image_local_repo.outputs.last_image }}"
         docker pull "docker.io/debian:${{ steps.last_image_docker_io.outputs.last_image }}"
         docker tag "docker.io/debian:${{ steps.last_image_docker_io.outputs.last_image }}" \
           "ghcr.io/jylenhof/download_debian/debian:${{ steps.last_image_docker_io.outputs.last_image }}"
         docker push "ghcr.io/jylenhof/download_debian/debian:${{ steps.last_image_docker_io.outputs.last_image }}"
-        docker image ls
+        echo "# Automatically updated by workflow Toto" > .docker_base_image_file
+        echo "ghcr.io/jylenhof/download_debian/debian:${{ steps.last_image_docker_io.outputs.last_image }}" >> .docker_base_image_file
+
+    - name: "update .docker_base_image file"
+      shell: bash
+      run: |
+        cat .docker_base_image_file
+        
+     
